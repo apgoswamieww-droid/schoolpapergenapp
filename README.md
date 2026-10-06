@@ -1,6 +1,6 @@
-# Welcome to your Expo app 👋
+# School Exam Generator
 
-This is an [Expo](https://expo.dev) project created with [`create-expo-app`](https://www.npmjs.com/package/create-expo-app).
+Cross-platform Expo application for teachers and students using the School Exam Generator backend.
 
 ## Get started
 
@@ -23,7 +23,21 @@ In the output, you'll find options to open the app in a
 - [iOS simulator](https://docs.expo.dev/workflow/ios-simulator/)
 - [Expo Go](https://expo.dev/go), a limited sandbox for trying out app development with Expo
 
-You can start developing by editing the files inside the **app** directory. This project uses [file-based routing](https://docs.expo.dev/router/introduction).
+Routes live in `src/app/`. Authentication uses Expo Router protected route groups and directs each signed-in user to the dashboard for their role.
+
+## Backend configuration
+
+Copy `.env.example` to `.env` and set `EXPO_PUBLIC_API_URL` to your backend origin (for example, `https://school-api.example.com`, without an `/api` suffix). Restart Expo after changing environment variables. On a physical device, use a backend host address reachable from the device; `localhost` refers to the device itself.
+
+The login screen posts `{ "email": "...", "password": "..." }` to `/api/auth/login`. The response must contain a token (`token`, `accessToken`, or `access_token`) and a user with role `TEACHER` or `STUDENT` and `school_id` (or `schoolId`). Sessions use `expo-secure-store` on iOS and Android. On web, where SecureStore is unavailable, the app uses `sessionStorage` for the current browser tab.
+
+## App structure
+
+- `src/api/` — Axios client and authentication API
+- `src/auth/` — typed session, persistence, and auth context
+- `src/constants/theme.ts` — shared light-mode design tokens
+- `src/app/(auth)/` — sign-in flow
+- `src/app/(teacher)/` and `src/app/(student)/` — role-protected dashboards
 
 ## Get a fresh project
 
